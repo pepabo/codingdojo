@@ -23,8 +23,4 @@ describe 'FizzBuzz' do
     it { expect(FizzBuzz.to(10)).to be == [1, 2, 'Fizz', 4, 'Buzz', 'Fizz', 7, 8, 'Fizz', 'Buzz'] }
     it { expect(FizzBuzz.to(15)).to be == [1, 2, 'Fizz', 4, 'Buzz', 'Fizz', 7, 8, 'Fizz', 'Buzz', 11, 'Fizz', 13, 14, 'FizzBuzz'] }
   end
-
-  describe 'print' do
-    it { expect(FizzBuzz.print(1)).to be ==  }
-  end
 end
