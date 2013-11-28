@@ -1,6 +1,6 @@
 class PhoneBook
   def initialize(str)
-    @numbers = str.split("\n")
+    @numbers = str.split("\n").map(&:strip)
   end
 
   def collision?(index)
