@@ -13,6 +13,12 @@ class PhoneBook
     end
   end
 
+  def output
+    @numbers.each_with_index do |num, i|
+      puts "#{num}: #{collision?(i-1) ? "true" : "false" }"
+    end
+  end
+
   private
 
   def extracted_addresses(addresses)

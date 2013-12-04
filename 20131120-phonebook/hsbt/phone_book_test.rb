@@ -30,4 +30,8 @@ class PhoneBookTest < Test::Unit::TestCase
     assert !book.collision?(1)
     assert !book.collision?(2)
   end
+
+  def test_output
+    PhoneBook.new('./phonebook.txt').output
+  end
 end
