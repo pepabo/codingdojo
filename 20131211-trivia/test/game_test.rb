@@ -21,7 +21,15 @@ class GameTest < MiniTest::Unit::TestCase
     assert_equal "Rock Question 49", game.rock_questions.last
   end
 
-  def test_is_playable
-    game = UglyTrivia::Game.new
+  def test_how_many_players
   end
+
+  def test_is_playable?
+    game = UglyTrivia::Game.new
+    game.add 'Chet'
+    assert !game.is_playable?
+    game.add 'Kuro'
+    assert game.is_playable?
+  end
+
 end
