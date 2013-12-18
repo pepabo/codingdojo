@@ -20,4 +20,8 @@ class GameTest < MiniTest::Unit::TestCase
     assert_equal "Sports Question 49", game.sports_questions.last
     assert_equal "Rock Question 49", game.rock_questions.last
   end
+
+  def test_is_playable
+    game = UglyTrivia::Game.new
+  end
 end
