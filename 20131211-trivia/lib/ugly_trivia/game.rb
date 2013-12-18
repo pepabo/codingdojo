@@ -27,23 +27,19 @@ module UglyTrivia
     end
 
     def is_playable?
-      how_many_players >= 2
+      @players.length >= 2
     end
 
     def add(player_name)
       @players.push player_name
-      @places[how_many_players] = 0
-      @purses[how_many_players] = 0
-      @in_penalty_box[how_many_players] = false
+      @places[@players.length] = 0
+      @purses[@players.length] = 0
+      @in_penalty_box[@players.length] = false
 
       puts "#{player_name} was added"
       puts "They are player number #{@players.length}"
 
       true
-    end
-
-    def how_many_players
-      @players.length
     end
 
     def roll(roll)
