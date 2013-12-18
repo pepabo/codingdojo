@@ -33,4 +33,6 @@ class GameTest < MiniTest::Unit::TestCase
     assert @game.is_playable?
   end
 
+  def test_roll
+  end
 end
