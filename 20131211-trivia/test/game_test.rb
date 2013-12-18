@@ -4,7 +4,7 @@ require_relative '../lib/ugly_trivia/game'
 
 class GameTest < MiniTest::Unit::TestCase
 
-  def test_add
+  def test_initialize
     game = UglyTrivia::Game.new
     assert game.add 'Chet'
     assert_equal ["Chet"], game.players
