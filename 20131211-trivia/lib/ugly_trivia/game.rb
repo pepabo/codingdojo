@@ -1,7 +1,7 @@
 module UglyTrivia
   class Game
     # XXX
-    attr_reader :players, :places, :purses, :in_penalty_box
+    attr_reader :players, :places, :purses, :in_penalty_box, :current_player_index
     attr_reader :pop_questions, :science_questions, :sports_questions, :rock_questions
 
     def  initialize
@@ -15,7 +15,7 @@ module UglyTrivia
       @sports_questions = []
       @rock_questions = []
 
-      @current_player = 0
+      @current_player_index = 0
       @is_getting_out_of_penalty_box = false
 
       50.times do |i|
@@ -43,34 +43,35 @@ module UglyTrivia
     end
 
     def roll(roll)
-      puts "#{@players[@current_player]} is the current player"
+      puts "#{@players[@current_player_index]} is the current player"
       puts "They have rolled a #{roll}"
 
-      if @in_penalty_box[@current_player]
+      if @in_penalty_box[@current_player_index]
         if roll % 2 != 0
           @is_getting_out_of_penalty_box = true
 
-          puts "#{@players[@current_player]} is getting out of the penalty box"
-          @places[@current_player] = @places[@current_player] + roll
-          @places[@current_player] = @places[@current_player] - 12 if @places[@current_player] > 11
+          puts "#{@players[@current_player_index]} is getting out of the penalty box"
+          move_places(roll)
 
-          puts "#{@players[@current_player]}'s new location is #{@places[@current_player]}"
+          puts "#{@players[@current_player_index]}'s new location is #{@places[@current_player_index]}"
           puts "The category is #{current_category}"
           ask_question
         else
-          puts "#{@players[@current_player]} is not getting out of the penalty box"
+          puts "#{@players[@current_player_index]} is not getting out of the penalty box"
           @is_getting_out_of_penalty_box = false
         end
 
       else
-
-        @places[@current_player] = @places[@current_player] + roll
-        @places[@current_player] = @places[@current_player] - 12 if @places[@current_player] > 11
-
-        puts "#{@players[@current_player]}'s new location is #{@places[@current_player]}"
+        move_places(roll)
+        puts "#{@players[@current_player_index]}'s new location is #{@places[@current_player_index]}"
         puts "The category is #{current_category}"
         ask_question
       end
+    end
+
+    def move_places(roll)
+      @places[@current_player_index] = @places[@current_player_index] + roll
+      @places[@current_player_index] = @places[@current_player_index] - 12 if @places[@current_player_index] > 11
     end
 
   private
@@ -83,35 +84,35 @@ module UglyTrivia
     end
 
     def current_category
-      return 'Pop' if @places[@current_player] == 0
-      return 'Pop' if @places[@current_player] == 4
-      return 'Pop' if @places[@current_player] == 8
-      return 'Science' if @places[@current_player] == 1
-      return 'Science' if @places[@current_player] == 5
-      return 'Science' if @places[@current_player] == 9
-      return 'Sports' if @places[@current_player] == 2
-      return 'Sports' if @places[@current_player] == 6
-      return 'Sports' if @places[@current_player] == 10
+      return 'Pop' if @places[@current_player_index] == 0
+      return 'Pop' if @places[@current_player_index] == 4
+      return 'Pop' if @places[@current_player_index] == 8
+      return 'Science' if @places[@current_player_index] == 1
+      return 'Science' if @places[@current_player_index] == 5
+      return 'Science' if @places[@current_player_index] == 9
+      return 'Sports' if @places[@current_player_index] == 2
+      return 'Sports' if @places[@current_player_index] == 6
+      return 'Sports' if @places[@current_player_index] == 10
       return 'Rock'
     end
 
   public
 
     def was_correctly_answered
-      if @in_penalty_box[@current_player]
+      if @in_penalty_box[@current_player_index]
         if @is_getting_out_of_penalty_box
           puts 'Answer was correct!!!!'
-          @purses[@current_player] += 1
-          puts "#{@players[@current_player]} now has #{@purses[@current_player]} Gold Coins."
+          @purses[@current_player_index] += 1
+          puts "#{@players[@current_player_index]} now has #{@purses[@current_player_index]} Gold Coins."
 
           winner = did_player_win()
-          @current_player += 1
-          @current_player = 0 if @current_player == @players.length
+          @current_player_index += 1
+          @current_player_index = 0 if @current_player_index == @players.length
 
           winner
         else
-          @current_player += 1
-          @current_player = 0 if @current_player == @players.length
+          @current_player_index += 1
+          @current_player_index = 0 if @current_player_index == @players.length
           true
         end
 
@@ -120,31 +121,31 @@ module UglyTrivia
       else
 
         puts "Answer was corrent!!!!"
-        @purses[@current_player] += 1
-        puts "#{@players[@current_player]} now has #{@purses[@current_player]} Gold Coins."
+        @purses[@current_player_index] += 1
+        puts "#{@players[@current_player_index]} now has #{@purses[@current_player_index]} Gold Coins."
 
         winner = did_player_win
-        @current_player += 1
-        @current_player = 0 if @current_player == @players.length
+        @current_player_index += 1
+        @current_player_index = 0 if @current_player_index == @players.length
 
         return winner
       end
     end
 
     def wrong_answer
-  		puts 'Question was incorrectly answered'
-  		puts "#{@players[@current_player]} was sent to the penalty box"
-  		@in_penalty_box[@current_player] = true
+      puts 'Question was incorrectly answered'
+      puts "#{@players[@current_player_index]} was sent to the penalty box"
+      @in_penalty_box[@current_player_index] = true
 
-      @current_player += 1
-      @current_player = 0 if @current_player == @players.length
-  		return true
+      @current_player_index += 1
+      @current_player_index = 0 if @current_player_index == @players.length
+      return true
     end
 
   private
 
     def did_player_win
-      !(@purses[@current_player] == 6)
+      !(@purses[@current_player_index] == 6)
     end
   end
 end

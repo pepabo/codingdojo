@@ -7,7 +7,6 @@ class GameTest < MiniTest::Unit::TestCase
     @game = UglyTrivia::Game.new
   end
 
-
   def test_initialize
     assert_equal 50, @game.pop_questions.size
 
@@ -24,6 +23,7 @@ class GameTest < MiniTest::Unit::TestCase
     assert_equal 0, @game.places[1]
     assert_equal 0, @game.purses[1]
     assert !@game.in_penalty_box[1]
+    assert_equal Array, @game.places.class
   end
 
   def test_is_playable?
@@ -33,6 +33,18 @@ class GameTest < MiniTest::Unit::TestCase
     assert @game.is_playable?
   end
 
-  def test_roll
+  def test_move_places
+    @game.add 'Kita'
+    @game.add 'Kuro'
+    @game.move_places(11)
+    assert_equal 11, @game.places[@game.current_player_index]
   end
+
+  def test_move_places_when_greater_than_12
+    @game.add 'Kita'
+    @game.add 'Kuro'
+    @game.move_places(12)
+    assert_equal 0, @game.places[@game.current_player_index]
+  end
+
 end
