@@ -104,13 +104,16 @@ module UglyTrivia
     end
 
   public
+    def add_purses
+      puts 'Answer was correct!!!!'
+      @purses[@current_player_index] += 1
+      puts "#{@players[@current_player_index]} now has #{@purses[@current_player_index]} Gold Coins."
+    end
 
     def was_correctly_answered
       if @in_penalty_box[@current_player_index]
         if @is_getting_out_of_penalty_box
-          puts 'Answer was correct!!!!'
-          @purses[@current_player_index] += 1
-          puts "#{@players[@current_player_index]} now has #{@purses[@current_player_index]} Gold Coins."
+          add_purses
 
           winner = did_player_win()
           @current_player_index += 1
@@ -123,9 +126,7 @@ module UglyTrivia
           true
         end
       else
-        puts "Answer was corrent!!!!"
-        @purses[@current_player_index] += 1
-        puts "#{@players[@current_player_index]} now has #{@purses[@current_player_index]} Gold Coins."
+        add_purses
 
         winner = did_player_win
         @current_player_index += 1
