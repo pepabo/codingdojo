@@ -47,4 +47,13 @@ class GameTest < MiniTest::Unit::TestCase
     assert_equal 0, @game.places[@game.current_player_index]
   end
 
+  def test_was_correctly_answered
+    @game.add 'Kita'
+    @game.add 'Kuro'
+    @game.roll(1)
+    winner = @game.was_correctly_answered
+    assert_equal 1, @game.purses[0]
+    assert_equal @game.current_player_index, 1
+  end
+
 end
