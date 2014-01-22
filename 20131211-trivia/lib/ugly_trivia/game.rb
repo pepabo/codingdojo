@@ -49,28 +49,36 @@ module UglyTrivia
       if @in_penalty_box[@current_player_index]
         if roll % 2 != 0
           @is_getting_out_of_penalty_box = true
-
-          puts "#{@players[@current_player_index]} is getting out of the penalty box"
+          getting_out_of_penalty_box
           move_places(roll)
-
-          puts "#{@players[@current_player_index]}'s new location is #{@places[@current_player_index]}"
-          puts "The category is #{current_category}"
+          place_and_category_messages
           ask_question
         else
-          puts "#{@players[@current_player_index]} is not getting out of the penalty box"
+          getting_out_of_penalty_box(:penalty)
           @is_getting_out_of_penalty_box = false
         end
-
       else
         move_places(roll)
-        puts "#{@players[@current_player_index]}'s new location is #{@places[@current_player_index]}"
-        puts "The category is #{current_category}"
+        place_and_category_messages
         ask_question
       end
     end
 
     def move_places(roll)
       @places[@current_player_index] = (@places[@current_player_index] + roll) % 12
+    end
+
+    def place_and_category_messages
+      puts "#{@players[@current_player_index]}'s new location is #{@places[@current_player_index]}"
+      puts "The category is #{current_category}"
+    end
+
+    def getting_out_of_penalty_box(status = :inpenalty)
+      if status == :inpanalty
+        puts "#{@players[@current_player_index]} is getting out of the penalty box"
+      else
+        puts "#{@players[@current_player_index]} is not getting out of the penalty box"
+      end
     end
 
   private
