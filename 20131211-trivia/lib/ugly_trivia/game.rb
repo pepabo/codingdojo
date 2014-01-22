@@ -122,11 +122,7 @@ module UglyTrivia
           @current_player_index = 0 if @current_player_index == @players.length
           true
         end
-
-
-
       else
-
         puts "Answer was corrent!!!!"
         @purses[@current_player_index] += 1
         puts "#{@players[@current_player_index]} now has #{@purses[@current_player_index]} Gold Coins."
