@@ -70,8 +70,7 @@ module UglyTrivia
     end
 
     def move_places(roll)
-      @places[@current_player_index] = @places[@current_player_index] + roll
-      @places[@current_player_index] = @places[@current_player_index] - 12 if @places[@current_player_index] > 11
+      @places[@current_player_index] = (@places[@current_player_index] + roll) % 12
     end
 
   private
