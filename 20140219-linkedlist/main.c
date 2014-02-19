@@ -8,7 +8,10 @@ struct node {
 
 int main(void) {
   struct node root;
+  struct node next_node;
   root.value = 10;
-  printf("%d\n", root.value);
+  next_node.value = 20;
+  root.next = &next_node;
+  printf("%d\n", root.next->value);
   return 0;
 }
