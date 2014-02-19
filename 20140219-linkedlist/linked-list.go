@@ -9,7 +9,7 @@ type List struct {
 }
 
 type Node struct {
-	Value int
+	Value interface{}
 	Next  *Node
 }
 
@@ -34,8 +34,8 @@ func main() {
 	list := &List{}
 
 	list.append(&Node{Value:1})
-	list.append(&Node{Value:2})
-	list.append(&Node{Value:3})
+	list.append(&Node{Value:"foo"})
+	list.append(&Node{Value:true})
 
 	node := list.Root
 	for node != nil {
