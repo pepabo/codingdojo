@@ -1,9 +1,16 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 int fib(int n);
 
 int main(int argc, char **argv) {
-  for(int i=0; i < 30; i++) {
+  int term_number = 0;
+  if (argc >= 2) {
+    term_number = atoi(argv[1]);
+  } else {
+    term_number = 30;
+  }
+  for(int i=0; i < term_number; i++) {
     printf("%d, ", fib(i));
     fflush(stdout);
   }
