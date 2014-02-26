@@ -5,18 +5,14 @@ int _fib(int i, int x, int y)
 {
   int result;
 
-  if (i < 0) {
+  if (i < 0)
     goto fail;
-  }
-  else if (i == 0) {
+  else if (i == 0)
     result = 0;
-  }
-  else if (i == 1) {
+  else if (i == 1)
     result = 1;
-  }
-  else {
+  else
     result = x + y;
-  }
 
   return result;
 
