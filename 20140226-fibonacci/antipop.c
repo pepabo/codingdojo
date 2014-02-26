@@ -1,17 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int _fib(int max, int x, int y)
+int _fib(int i, int x, int y)
 {
   int result;
 
-  if (max < 0) {
+  if (i < 0) {
     goto fail;
   }
-  else if (max == 0) {
+  else if (i == 0) {
     result = 0;
   }
-  else if (max == 1) {
+  else if (i == 1) {
     result = 1;
   }
   else {
@@ -31,8 +31,8 @@ void fib(int max)
   int x = 1;
   int y = 0;
 
-  for (int i = 0; i < max; i++) {
-    current = _fib(max, x, y);
+  for (int i = 0; i <= max; i++) {
+    current = _fib(i, x, y);
     printf("%d\n", current);
     y = x;
     x = current;
