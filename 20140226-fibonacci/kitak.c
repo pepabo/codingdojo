@@ -5,12 +5,14 @@ int fib(int n);
 int main(int argc, char **argv) {
   for(int i=0; i < 30; i++) {
     printf("%d, ", fib(i));
+    fflush(stdout);
   }
+  printf("・・・");
   return 0;
 }
 
 int fib(int n) {
-  if (n == 0) {
+  if (n <= 0) {
     return 0;
   } else if (n == 1) {
     return 1;
