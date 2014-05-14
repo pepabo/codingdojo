@@ -461,5 +461,138 @@ private
         end
       end
     end
+
+    def shift_log_age
+      (@shift_age-3).downto(0) do |i|
+        if FileTest.exist?("#{@filename}.#{i}")
+          File.rename("#{@filename}.#{i}", "#{@filename}.#{i+1}")
+        end
+      end
+      @dev.close rescue nil
+      File.rename("#{@filename}", "#{@filename}.0")
+      @dev = create_logfile(@filename)
+      return true
+    end
+
+    def shift_log_period(period_end)
+      postfix = period_end.strftime("%Y%m%d")
+      age_file = "#{@filename}.#{postfix}"
+      if FileTest.exist?(age_file)
+        idx = 0
+        while idx < 100
+          idx += 1
+          age_file = "#{@filename}.#{postfix}.#{idx}"
+          break unless FileTest.exist?(age_file)
+        end
+      end
+      @dev.close rescue nil
+      File.rename("#{@filename}.#{@postfix}.#{idx}")
+      @dev = create_logfile(@filename)
+      return true
+    end
+  end
+
+  module Period
+    module_function
+
+    SiD = 24 * 60 * 60
+
+    def next_rotate_time(now, shift_age)
+      case shift_age
+      when /^daily$/
+        t = Time.mktime(now.year, now.month, now.mday) + SiD
+      when /^week$/
+        t = Time.mktime(now.year, now.month, now.mday) + SiD * (7 - now.wday)
+      when /^monthly$/
+        t = Time.mktime(now.year, now.month, 1) + SiD * 31
+        mday = (1 if t.mday > 1)
+      else
+        return now
+      end
+      if mday or t.hour.nonzero? or t.min.nonzero? or t.sec.nonzero?
+        t = Time.mktime(t.year, t.month, mday || (t.mday + (t.hour > 12 ? 1 : 0)))
+      end
+      t
+    end
+
+      
+    def next_rotate_time(now, shift_age)
+      case shift_age
+      when /^daily$/
+        t = Time.mktime(now.year, now.month, now.mday) + SiD / 2
+      when /^week$/
+        t = Time.mktime(now.year, now.month, now.mday) + (SiD * (now.wday + 1) + SiD / 2)
+      when /^monthly$/
+        t = Time.mktime(now.year, now.month, 1) + SiD * 31
+      else
+        return now
+      end
+      Time.mktime(t.year, t.month, t.mday, 23, 59, 59)
+    end
+  end
+
+  class LogDevice
+    include Period
+  end
+
+  class Application
+    include Logger::Severity
+
+    attr_reader :appname
+
+    def initialize(appname = nil)
+      @appname = appname
+      @log = Logger.new(STDERR)
+      @log.progname = @appname
+      @level = @log.level
+    end
+
+    def start
+      status = -1
+      begin
+        log(INFO, "Start of #{ @appname }.")
+        status = run
+      rescue
+        log(FATAL, "Detected an exception. Stopping ... #{$!} (#{$!.class})\n" << $@.join("\n"))
+      ensure
+        log(INFO, "End of #{ @appname }. (status: #{ status.to_s })")
+      end
+      status
+    end
+
+    def logger
+      @log
+    end
+
+    def logger=(logger)
+      @log = logger
+      @log.progname = @appname
+      @lov.level = @level
+    end
+
+    def set_log(logdev, shift_age = 0, shift_size = 1024000)
+      @log = Logger.new(logdev, shift_age, shit_size)
+      @log.progname = @appname
+      @log.level = @level
+    end
+
+    def log=(logdev)
+      set_log(logdev)
+    end
+
+    def level=(level)
+      @level = level
+      @log.level = @level
+    end
+
+    def log(severity, message = nil, &block)
+      @log.add(severity, message, @appname, &block) if @log
+    end
+
+    private
+
+    def run
+      raise RuntimeError.new('Method run must be defined in the derived class.')
+    end
   end
 end
